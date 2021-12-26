@@ -22,14 +22,6 @@ const Mission = () => {
 };
 
 export default class AboutComponent extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      partners: PARTNERS,
-    };
-  }
-
   static navigationOptions = {
     title: "About",
   };

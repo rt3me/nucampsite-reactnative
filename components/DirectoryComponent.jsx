@@ -13,13 +13,6 @@ const mapStateToProps = (state) => {
 };
 
 class Directory extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      campsites: CAMPSITES,
-    };
-  }
-
   static navigationOptions = {
     title: "Directory",
   };

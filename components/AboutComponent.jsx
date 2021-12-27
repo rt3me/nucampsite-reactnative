@@ -21,7 +21,7 @@ const Mission = () => {
   );
 };
 
-export default class AboutComponent extends Component {
+class About extends Component {
   static navigationOptions = {
     title: "About",
   };
@@ -31,7 +31,7 @@ export default class AboutComponent extends Component {
       return <ListItem title={item.name} subtitle={item.description} leftAvatar={{ source: { uri: baseUrl + item.image } }} />;
     };
 
-    console.log("Partneers", this.state.partners);
+    console.log("Partneers", this.props.partners);
 
     return (
       <ScrollView>

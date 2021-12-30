@@ -5,7 +5,7 @@ import { CAMPSITES } from "../shared/campsites";
 import { COMMENTS } from "../shared/comments";
 import { connect } from "react-redux";
 import { baseUrl } from "../shared/baseUrl";
-import { postFavorite } from "../redux/ActionCreators";
+import { postFavorite, postComment } from "../redux/ActionCreators";
 
 const mapStateToProps = (state) => {
   return {
@@ -17,6 +17,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = {
   postFavorite: (campsiteId) => postFavorite(campsiteId),
+  postComment: (campsiteId, rating, author, text) => postComment(campsiteId, rating, author, text),
 };
 
 function RenderCampsite(props) {
@@ -41,7 +42,7 @@ function RenderComments({ comments }) {
     return (
       <View style={{ margin: 10 }}>
         <Text style={{ fontSize: 14 }}>{item.text}</Text>
-        <Rating showRating readonly startingValue={item.rating} imageSize={10} style={{ alignItems: "flex-start", paddingVertical: "5%" }} />
+        <Rating readonly startingValue={item.rating} imageSize={10} style={{ alignItems: "flex-start", paddingVertical: "5%" }} />
         <Text style={{ fontSize: 12 }}>{`-- ${item.author}, ${item.date}`}</Text>
       </View>
     );
@@ -76,7 +77,8 @@ class CampsiteInfo extends Component {
   }
 
   handleComment(campsiteId) {
-    console.log(JSON.stringify(this.state));
+    console.log(`Handling comment campsiteId: ${campsiteId} rating: ${this.state.rating} author: ${this.state.author} text: ${this.state.text}`);
+    this.props.postComment(campsiteId, this.state.rating, this.state.author, this.state.text);
     this.toggleModal();
   }
 

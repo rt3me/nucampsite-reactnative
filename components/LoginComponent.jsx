@@ -1,11 +1,12 @@
 import React, { Component } from "react";
 import { View, StyleSheet, ScrollView, Image } from "react-native";
 import { Input, CheckBox, Button, Icon } from "react-native-elements";
+import { createBottomTabNavigator } from "react-navigation-tabs";
 import * as SecureStore from "expo-secure-store";
 import * as ImagePicker from "expo-image-picker";
 import * as Permissions from "expo-permissions";
-import { createBottomTabNavigator } from "react-navigation-tabs";
 import { baseUrl } from "../shared/baseUrl";
+import { ImageManipulator } from "expo-image-manipulator";
 
 class LoginTab extends Component {
   constructor(props) {
@@ -104,9 +105,16 @@ class RegisterTab extends Component {
       });
       if (!capturedImage.cancelled) {
         console.log(capturedImage);
-        this.setState({ imageUrl: capturedImage.uri });
+        this.processImage(capturedImage.uri);
       }
     }
+  };
+
+  processImage = async (imgUri) => {
+    processedImage = await ImageManipulator.manipulateAsync(imgUri, [{ resize: { width: 400 } }], { compress: 0, format: "png" });
+    console.log("Processed Pic:", processedImage);
+
+    this.setState({ ...this.state, imageUrl: processedImage.uri });
   };
 
   handleRegister() {

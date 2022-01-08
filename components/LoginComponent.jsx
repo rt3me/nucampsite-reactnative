@@ -6,7 +6,7 @@ import * as SecureStore from "expo-secure-store";
 import * as ImagePicker from "expo-image-picker";
 import * as Permissions from "expo-permissions";
 import { baseUrl } from "../shared/baseUrl";
-import { ImageManipulator } from "expo-image-manipulator";
+import * as ImageManipulator from "expo-image-manipulator";
 
 class LoginTab extends Component {
   constructor(props) {
@@ -110,8 +110,25 @@ class RegisterTab extends Component {
     }
   };
 
+  getImageFromGallery = async () => {
+    const cameraRollPermission = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+
+    if (cameraRollPermission.status === "granted") {
+      const capturedImage = await ImagePicker.launchImageLibraryAsync({
+        allowsEditing: true,
+        aspect: [1, 1],
+      });
+      if (!capturedImage.cancelled) {
+        console.log(capturedImage);
+        this.processImage(capturedImage.uri);
+      }
+    }
+  };
+
   processImage = async (imgUri) => {
-    processedImage = await ImageManipulator.manipulateAsync(imgUri, [{ resize: { width: 400 } }], { compress: 0, format: "png" });
+    console.log("About to be rejected!");
+    const processedImage = await ImageManipulator.manipulateAsync(imgUri, [{ resize: { width: 400 } }], { compress: 0, format: "png" });
+    console.log("Just got rejected!");
     console.log("Processed Pic:", processedImage);
 
     this.setState({ ...this.state, imageUrl: processedImage.uri });
@@ -133,6 +150,7 @@ class RegisterTab extends Component {
           <View style={styles.imageContainer}>
             <Image source={{ uri: this.state.imageUrl }} loadingIndicatorSource={require("./images/logo.png")} style={styles.image} />
             <Button title="Camera" onPress={this.getImageFromCamera} />
+            <Button title="Gallery" onPress={this.getImageFromGallery} />
           </View>
           <Input
             placeholder="Username"

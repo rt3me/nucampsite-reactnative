@@ -7,6 +7,7 @@ import * as ImagePicker from "expo-image-picker";
 import * as Permissions from "expo-permissions";
 import { baseUrl } from "../shared/baseUrl";
 import * as ImageManipulator from "expo-image-manipulator";
+import * as MediaLibrary from "expo-media-library";
 
 class LoginTab extends Component {
   constructor(props) {
@@ -105,6 +106,7 @@ class RegisterTab extends Component {
       });
       if (!capturedImage.cancelled) {
         console.log(capturedImage);
+        MediaLibrary.saveToLibraryAsync(capturedImage.uri);
         this.processImage(capturedImage.uri);
       }
     }
